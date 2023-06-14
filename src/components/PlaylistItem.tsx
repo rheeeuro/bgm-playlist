@@ -1,7 +1,11 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import tw from "tailwind-styled-components";
+import PlaylistItemDropdown from "./PlaylistItemDropdown";
 
 export function PlaylistItem() {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
     <Container>
       <InformationContainer>
@@ -11,7 +15,18 @@ export function PlaylistItem() {
           <Description>fjsnfldsfs</Description>
         </Information>
       </InformationContainer>
-      <CustomEllipsisVerticalIcon />
+      <MenuButton
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        onMouseLeave={() => {
+          setOpen(false);
+        }}
+      >
+        <CustomEllipsisVerticalIcon />
+        {open && <PlaylistItemDropdown />}
+      </MenuButton>
     </Container>
   );
 }
@@ -59,6 +74,12 @@ const Description = tw.p`
 w-full
 text-md
 font-thin
+`;
+
+const MenuButton = tw.div`
+w-6
+h-6
+relative
 `;
 
 const CustomEllipsisVerticalIcon = tw(EllipsisVerticalIcon)`
