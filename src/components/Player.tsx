@@ -5,6 +5,7 @@ import {
   ForwardIcon,
   ListBulletIcon,
   PlayIcon,
+  SpeakerWaveIcon,
   WrenchIcon,
 } from "@heroicons/react/24/outline";
 
@@ -27,6 +28,7 @@ export function Player() {
         <Description>daskfjhdsajkfjksafhkajshfdkjahsdkfj</Description>
       </Information>
       <Toolbar>
+        <CustomSpeakerIcon />
         <CustomWrenchIcon />
         <CustomArrowTopRightOnSquareIcon />
         <CustomListBulletIcon />
@@ -35,7 +37,7 @@ export function Player() {
   );
 }
 
-const Container = tw.div`
+export const Container = tw.div`
 my-10
 w-[28rem]
 h-[40rem]
@@ -118,6 +120,11 @@ h-16
 flex
 justify-around
 items-center
+`;
+
+const CustomSpeakerIcon = tw(SpeakerWaveIcon)`
+w-6
+h-6
 `;
 
 const CustomWrenchIcon = tw(WrenchIcon)`
