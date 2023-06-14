@@ -128,7 +128,7 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
       </Controller>
       <Information>
         <Title>{playItem.title}</Title>
-        <Description>{playItem.videoId}</Description>
+        <Description>{playItem.originalTitle}</Description>
       </Information>
       <Toolbar>
         {isMuted ? (
@@ -234,11 +234,19 @@ overflow-clip
 overflow-ellipsis
 break-words
 line-clamp-1
+mb-2
+text-slate-900
 `;
 
 const Description = tw.p`
 font-thin
-text-md
+text-sm
+px-2
+overflow-clip
+overflow-ellipsis
+break-words
+line-clamp-1
+text-slate-900/50
 `;
 
 const Toolbar = tw.div`

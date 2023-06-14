@@ -82,7 +82,7 @@ export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
         <Thumbnail style={{ backgroundImage: `url(${getThumbnailUrl()})` }} />
         <Information>
           <Title>{youtube.title}</Title>
-          <Description>{youtube.videoId}</Description>
+          <Description>{youtube.originalTitle}</Description>
         </Information>
       </InformationContainer>
       <MenuButton
@@ -145,12 +145,19 @@ overflow-clip
 overflow-ellipsis
 break-words
 line-clamp-1
+mb-2
+text-slate-900
 `;
 
 const Description = tw.p`
 w-full
-text-md
+text-sm
 font-thin
+overflow-clip
+overflow-ellipsis
+break-words
+line-clamp-1
+text-slate-900/50
 `;
 
 const MenuButton = tw.div`
