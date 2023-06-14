@@ -38,6 +38,7 @@ export function Playlist({
       <List>
         {youtubes.map((youtube) => (
           <PlaylistItem
+            key={youtube.id}
             youtube={youtube}
             onClick={() => {
               setPlayItem(youtube);

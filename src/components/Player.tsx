@@ -40,10 +40,6 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
     }, 1000);
   };
 
-  useEffect(() => {
-    console.log(currentTime);
-  }, [currentTime]);
-
   const opts: YouTubeProps["opts"] = {
     height: "336",
     width: "448",
