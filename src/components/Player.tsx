@@ -27,6 +27,10 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
+  useEffect(() => {
+    document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl()}')`;
+  }, []);
+
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setYoutubePlayer(event.target);
     event.target.playVideo();
@@ -159,6 +163,7 @@ items-center
 shadow-2xl
 rounded-lg
 bg-slate-50
+overflow-hidden
 `;
 
 const VideoContainer = tw.div`
@@ -169,6 +174,7 @@ rounded-t-lg
 bg-cover
 bg-no-repeat
 bg-center
+overflow-hidden
 `;
 
 const ProgressBar = tw.input`
