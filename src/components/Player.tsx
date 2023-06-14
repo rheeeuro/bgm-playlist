@@ -54,9 +54,12 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
   };
 
   const durationTextFormat = (duration: number) => {
-    const hours = Math.floor(duration / 3600);
-    const minutes = Math.floor(duration / 60);
-    const seconds = Math.floor(duration % 60);
+    let time = Math.floor(duration);
+    const hours = Math.floor(time / 3600);
+    time -= hours * 3600;
+    const minutes = Math.floor(time / 60);
+    time -= minutes * 60;
+    const seconds = time;
 
     if (duration >= 3600)
       return `${formatText(hours)}:${formatText(minutes)}:${formatText(
@@ -112,7 +115,7 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
         max={duration}
         step={1}
         value={currentTime}
-        onChange={seekTo}
+        onInput={seekTo}
       />
       <Playtime>
         <h1>{durationTextFormat(currentTime)}</h1>
