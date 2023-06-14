@@ -18,30 +18,45 @@ import { formatText } from "../utils/text";
 interface PlayerProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
   playItem: IYoutube;
+  goNext: () => void;
+  goPrevious: () => void;
 }
 
-export function Player({ setOnPlayer, playItem }: PlayerProps) {
+export function Player({
+  setOnPlayer,
+  playItem,
+  goNext,
+  goPrevious,
+}: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
+  let interval: string | number | NodeJS.Timeout | undefined;
+
   useEffect(() => {
-    document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl()}')`;
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
+
+  useEffect(() => {
+    setCurrentTime(0);
+    document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl()}')`;
+  }, [playItem.videoId]);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setYoutubePlayer(event.target);
     event.target.playVideo();
-
-    setDuration(event.target.getDuration());
-
-    setInterval(() => {
-      if (event.target.getCurrentTime() !== 0) {
+    interval = setInterval(() => {
+      const time = event.target.getCurrentTime();
+      if (time !== 0) {
         setCurrentTime(event.target.getCurrentTime());
       }
     }, 1000);
+    setDuration(event.target.getDuration());
   };
 
   const opts: YouTubeProps["opts"] = {
@@ -122,13 +137,13 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
         <h1>{durationTextFormat(duration)}</h1>
       </Playtime>
       <Controller>
-        <CustomBackwardIcon />
+        <CustomBackwardIcon onClick={goPrevious} />
         {isPlaying ? (
           <CustomPauseIcon onClick={pause} />
         ) : (
           <CustomPlayIcon onClick={play} />
         )}
-        <CustomForwardIcon />
+        <CustomForwardIcon onClick={goNext} />
       </Controller>
       <Information>
         <Title>{playItem.title}</Title>

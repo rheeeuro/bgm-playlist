@@ -76,6 +76,22 @@ function App() {
     };
   }, []);
 
+  const goNext = () => {
+    if (playItem === null) return;
+    const index = youtubes.indexOf(playItem);
+    if (index < youtubes.length - 1) {
+      setPlayItem(youtubes[index + 1]);
+    }
+  };
+
+  const goPrevious = () => {
+    if (playItem === null) return;
+    const index = youtubes.indexOf(playItem);
+    if (index > 0) {
+      setPlayItem(youtubes[index - 1]);
+    }
+  };
+
   return (
     <Container>
       <Header />
@@ -90,7 +106,13 @@ function App() {
           />
         )}
         {onPlayer && playItem && (
-          <Player setOnPlayer={setOnPlayer} playItem={playItem} />
+          <Player
+            key={playItem.id}
+            setOnPlayer={setOnPlayer}
+            playItem={playItem}
+            goNext={goNext}
+            goPrevious={goPrevious}
+          />
         )}
       </Content>
     </Container>
