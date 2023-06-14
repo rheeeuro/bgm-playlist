@@ -7,6 +7,7 @@ import {
   PauseIcon,
   PlayIcon,
   SpeakerWaveIcon,
+  SpeakerXMarkIcon,
   WrenchIcon,
 } from "@heroicons/react/24/outline";
 import { IYoutube } from "../App";
@@ -21,6 +22,7 @@ interface PlayerProps {
 export function Player({ setOnPlayer, playItem }: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setYoutubePlayer(event.target);
@@ -32,6 +34,7 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
     width: "448",
     playerVars: {
       autoplay: 1,
+      controls: 0,
     },
   };
 
@@ -51,6 +54,16 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
     youtubePlayer.pauseVideo();
   };
 
+  const mute = () => {
+    setIsMuted(true);
+    youtubePlayer.mute();
+  };
+
+  const unMute = () => {
+    setIsMuted(false);
+    youtubePlayer.unMute();
+  };
+
   return (
     <Container>
       <VideoContainer
@@ -60,6 +73,8 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
           videoId={playItem.videoId}
           opts={opts}
           onReady={onPlayerReady}
+          onPlay={play}
+          onPause={pause}
         />
       </VideoContainer>
       <ProgressBar />
@@ -81,7 +96,11 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
         <Description>{playItem.videoId}</Description>
       </Information>
       <Toolbar>
-        <CustomSpeakerIcon />
+        {isMuted ? (
+          <CustomSpeakerXMarkIcon onClick={unMute} />
+        ) : (
+          <CustomSpeakerWaveIcon onClick={mute} />
+        )}
         <CustomWrenchIcon />
         <CustomArrowTopRightOnSquareIcon />
         <CustomListBulletIcon
@@ -193,7 +212,12 @@ justify-around
 items-center
 `;
 
-const CustomSpeakerIcon = tw(SpeakerWaveIcon)`
+const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
+w-6
+h-6
+`;
+
+const CustomSpeakerXMarkIcon = tw(SpeakerXMarkIcon)`
 w-6
 h-6
 `;
