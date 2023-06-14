@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
+import { formatText } from "../utils/text";
 
 export function Clock() {
   const [date, setDate] = useState<string>("");
@@ -14,8 +15,6 @@ export function Clock() {
     setDate(newDate);
     setTime(newTime);
   };
-
-  const formatText = (time: number) => String(time).padStart(2, "0");
 
   const getNow = () => {
     const now: Date = new Date();

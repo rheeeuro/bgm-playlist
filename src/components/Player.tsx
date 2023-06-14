@@ -12,7 +12,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { IYoutube } from "../App";
 import YouTube, { YouTubeProps } from "react-youtube";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { formatText } from "../utils/text";
 
 interface PlayerProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,11 +24,25 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [duration, setDuration] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setYoutubePlayer(event.target);
     event.target.playVideo();
+
+    setDuration(event.target.getDuration());
+
+    setInterval(() => {
+      if (event.target.getCurrentTime() !== 0) {
+        setCurrentTime(event.target.getCurrentTime());
+      }
+    }, 1000);
   };
+
+  useEffect(() => {
+    console.log(currentTime);
+  }, [currentTime]);
 
   const opts: YouTubeProps["opts"] = {
     height: "336",
@@ -38,7 +53,17 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
     },
   };
 
-  const durationTextFormat = (text: string) => {};
+  const durationTextFormat = (duration: number) => {
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+
+    if (duration >= 3600)
+      return `${formatText(hours)}:${formatText(minutes)}:${formatText(
+        seconds
+      )}`;
+    else return `${formatText(minutes)}:${formatText(seconds)}`;
+  };
 
   const getMaxResThumbnailUrl = () => {
     return `https://img.youtube.com/vi/${playItem.videoId}/maxresdefault.jpg`;
@@ -64,6 +89,10 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
     youtubePlayer.unMute();
   };
 
+  const seekTo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    youtubePlayer.seekTo(event.target.value);
+  };
+
   return (
     <Container>
       <VideoContainer
@@ -77,10 +106,17 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
           onPause={pause}
         />
       </VideoContainer>
-      <ProgressBar />
+      <ProgressBar
+        type="range"
+        min={0}
+        max={duration}
+        step={1}
+        value={currentTime}
+        onChange={seekTo}
+      />
       <Playtime>
-        <h1>00:00:00</h1>
-        <h1>{playItem.duration}</h1>
+        <h1>{durationTextFormat(currentTime)}</h1>
+        <h1>{durationTextFormat(duration)}</h1>
       </Playtime>
       <Controller>
         <CustomBackwardIcon />
@@ -136,7 +172,7 @@ bg-no-repeat
 bg-center
 `;
 
-const ProgressBar = tw.div`
+const ProgressBar = tw.input`
 w-full
 h-1
 bg-pink-500
@@ -149,6 +185,8 @@ px-3
 py-1
 flex
 justify-between
+font-thin
+text-sm
 `;
 
 const Controller = tw.div`
