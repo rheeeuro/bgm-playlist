@@ -1,12 +1,15 @@
 import tw from "tailwind-styled-components";
 import "./App.css";
 import Header from "./components/Header";
+import Player from "./components/Player";
 
 function App() {
   return (
     <Container>
       <Header />
-      <Content>asd</Content>
+      <Content>
+        <Player />
+      </Content>
     </Container>
   );
 }
@@ -17,12 +20,10 @@ m-0
 flex
 flex-col
 items-center
-bg-slate-400
 `;
 
 const Content = tw.div`
-w-[44rem]
-lg:w-[80rem]
+w-[28rem]
 `;
 
 export default App;
