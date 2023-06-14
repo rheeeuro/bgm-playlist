@@ -2,17 +2,83 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import tw from "tailwind-styled-components";
 import PlaylistItemDropdown from "./PlaylistItemDropdown";
+import { IYoutube } from "../App";
+import { FieldErrors, useForm } from "react-hook-form";
 
-export function PlaylistItem() {
+interface PlaylistItemProps {
+  onClick: () => void;
+  youtube: IYoutube;
+}
+
+export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<IYoutube>();
   const [open, setOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const closeModal = () => {
+    reset();
+    setModalOpen(false);
+  };
+
+  const modifyBookmark = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    // setValue("id", bookmark.id);
+    setModalOpen(true);
+  };
+
+  const onValid = (data: IYoutube) => {
+    // setBookmarkItems((prev) => {
+    //   const newOne = prev.map((item) => {
+    //     if (item.id === data.id) {
+    //       return {
+    //         ...item,
+    //         title: data.title,
+    //         url: data.url,
+    //       };
+    //     } else {
+    //       return item;
+    //     }
+    //   });
+    //   localStorage.setItem("bookmarks", JSON.stringify(newOne));
+    //   return newOne;
+    // });
+    closeModal();
+  };
+
+  const onInValid = (errors: FieldErrors) => {
+    console.log(errors);
+  };
+
+  const deleteBookmark = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    // e.stopPropagation();
+    // const confirm = window.confirm(
+    //   `Are you sure you want to delete [${bookmark.title}]?`
+    // );
+    // if (!confirm) return;
+    // setBookmarkItems((prev) => {
+    //   const newOne = prev.filter((item) => item !== bookmark);
+    //   localStorage.setItem("bookmarks", JSON.stringify(newOne));
+    //   return newOne;
+    // });
+  };
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <InformationContainer>
         <Thumbnail />
         <Information>
-          <Title>fjsnfldsfs</Title>
-          <Description>fjsnfldsfs</Description>
+          <Title>{youtube.title}</Title>
+          <Description>{youtube.url}</Description>
         </Information>
       </InformationContainer>
       <MenuButton

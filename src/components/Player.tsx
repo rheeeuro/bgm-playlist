@@ -8,12 +8,14 @@ import {
   SpeakerWaveIcon,
   WrenchIcon,
 } from "@heroicons/react/24/outline";
+import { IYoutube } from "../App";
 
 interface PlayerProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
+  playItem: IYoutube;
 }
 
-export function Player({ setOnPlayer }: PlayerProps) {
+export function Player({ setOnPlayer, playItem }: PlayerProps) {
   return (
     <Container>
       <Video></Video>
@@ -28,8 +30,8 @@ export function Player({ setOnPlayer }: PlayerProps) {
         <CustomForwardIcon />
       </Controller>
       <Information>
-        <Title>Solid Gold (ft. MNDR)</Title>
-        <Description>daskfjhdsajkfjksafhkajshfdkjahsdkfj</Description>
+        <Title>{playItem.title}</Title>
+        <Description>{playItem.url}</Description>
       </Information>
       <Toolbar>
         <CustomSpeakerIcon />

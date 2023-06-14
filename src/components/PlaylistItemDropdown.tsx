@@ -56,9 +56,9 @@ shadow-lg
 
 const Button = tw.button`
 w-full
-h-1/2
+h-1/4
 flex
-px-2
+px-3
 items-center
 space-x-4
 text-md
