@@ -28,7 +28,7 @@ items-center
 
 const InformationContainer = tw.div`
 w-full
-h-full
+h-24
 flex
 items-center
 `;
@@ -43,7 +43,7 @@ mr-4
 
 const Information = tw.div`
 w-full
-h-full
+h-24
 flex
 flex-col
 justify-center

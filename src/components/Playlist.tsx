@@ -16,6 +16,14 @@ export function Playlist() {
         <PlaylistItem />
         <PlaylistItem />
         <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
+        <PlaylistItem />
       </List>
     </Container>
   );
@@ -23,7 +31,7 @@ export function Playlist() {
 
 const Topbar = tw.div`
 w-full
-h-10
+h-14
 rounded-t-xl
 flex
 items-center
@@ -49,6 +57,7 @@ w-full
 h-full
 flex
 flex-col
+overflow-y-scroll
 `;
 
 export default Playlist;
