@@ -18,7 +18,7 @@ function App() {
   const [youtubes, setYoutubes] = useState<IYoutube[]>([
     {
       id: "1",
-      title: "'지브리",
+      title: "지브리",
       originalTitle:
         "기억할게, 그 어느 여름날 | 지브리 스튜디오 OST (오케스트라 버전)",
       videoId: "L5No7rhWM-I",
