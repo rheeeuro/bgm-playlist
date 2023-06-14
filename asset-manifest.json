@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/bgm-playlist/static/css/main.4dcc8180.css",
+    "main.js": "/bgm-playlist/static/js/main.cb159f0f.js",
+    "index.html": "/bgm-playlist/index.html",
+    "main.4dcc8180.css.map": "/bgm-playlist/static/css/main.4dcc8180.css.map",
+    "main.cb159f0f.js.map": "/bgm-playlist/static/js/main.cb159f0f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4dcc8180.css",
+    "static/js/main.cb159f0f.js"
+  ]
+}
