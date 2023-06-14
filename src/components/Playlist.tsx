@@ -3,11 +3,19 @@ import { Container } from "./Player";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import PlaylistItem from "./PlaylistItem";
 
-export function Playlist() {
+interface PlaylistProps {
+  setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function Playlist({ setOnPlayer }: PlaylistProps) {
   return (
     <Container>
       <Topbar>
-        <CustomArrowUturnLeftIcon />
+        <CustomArrowUturnLeftIcon
+          onClick={() => {
+            setOnPlayer(true);
+          }}
+        />
         <Title>Playlist</Title>
       </Topbar>
       <List>
@@ -45,6 +53,7 @@ w-6
 h-6
 p-1
 rounded-md
+cursor-pointer
 bg-slate-300
 `;
 

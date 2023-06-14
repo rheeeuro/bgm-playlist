@@ -9,7 +9,11 @@ import {
   WrenchIcon,
 } from "@heroicons/react/24/outline";
 
-export function Player() {
+interface PlayerProps {
+  setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function Player({ setOnPlayer }: PlayerProps) {
   return (
     <Container>
       <Video></Video>
@@ -31,7 +35,11 @@ export function Player() {
         <CustomSpeakerIcon />
         <CustomWrenchIcon />
         <CustomArrowTopRightOnSquareIcon />
-        <CustomListBulletIcon />
+        <CustomListBulletIcon
+          onClick={() => {
+            setOnPlayer(false);
+          }}
+        />
       </Toolbar>
     </Container>
   );
@@ -140,6 +148,7 @@ h-6
 const CustomListBulletIcon = tw(ListBulletIcon)`
 w-6
 h-6
+cursor-pointer
 `;
 
 export default Player;

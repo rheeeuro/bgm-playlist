@@ -6,11 +6,17 @@ import { useState } from "react";
 import Playlist from "./components/Playlist";
 
 function App() {
-  const [showList, setShowList] = useState<boolean>(true);
+  const [onPlayer, setOnPlayer] = useState<boolean>(false);
   return (
     <Container>
       <Header />
-      <Content>{showList ? <Playlist /> : <Player />}</Content>
+      <Content>
+        {onPlayer ? (
+          <Player setOnPlayer={setOnPlayer} />
+        ) : (
+          <Playlist setOnPlayer={setOnPlayer} />
+        )}
+      </Content>
     </Container>
   );
 }
