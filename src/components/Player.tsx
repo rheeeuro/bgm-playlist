@@ -16,13 +16,19 @@ interface PlayerProps {
 }
 
 export function Player({ setOnPlayer, playItem }: PlayerProps) {
+  const durationTextFormat = (text: string) => {};
+
+  const getMaxResThumbnailUrl = () => {
+    return `https://img.youtube.com/vi/${playItem.videoId}/maxresdefault.jpg`;
+  };
+
   return (
     <Container>
-      <Video></Video>
+      <Video style={{ backgroundImage: `url(${getMaxResThumbnailUrl()})` }} />
       <ProgressBar />
       <Playtime>
-        <h1>00:00</h1>
-        <h1>00:00</h1>
+        <h1>00:00:00</h1>
+        <h1>{playItem.duration}</h1>
       </Playtime>
       <Controller>
         <CustomBackwardIcon />
@@ -31,7 +37,7 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
       </Controller>
       <Information>
         <Title>{playItem.title}</Title>
-        <Description>{playItem.url}</Description>
+        <Description>{playItem.videoId}</Description>
       </Information>
       <Toolbar>
         <CustomSpeakerIcon />
@@ -65,6 +71,9 @@ w-[28rem]
 h-[21rem]
 bg-black
 rounded-t-lg
+bg-cover
+bg-no-repeat
+bg-center
 `;
 
 const ProgressBar = tw.div`
@@ -117,6 +126,11 @@ text-center
 const Title = tw.h1`
 font-light
 text-2xl
+px-2
+overflow-clip
+overflow-ellipsis
+break-words
+line-clamp-1
 `;
 
 const Description = tw.p`

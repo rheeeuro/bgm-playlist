@@ -72,13 +72,17 @@ export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
     // });
   };
 
+  const getThumbnailUrl = () => {
+    return `https://img.youtube.com/vi/${youtube.videoId}/default.jpg`;
+  };
+
   return (
     <Container onClick={onClick}>
       <InformationContainer>
-        <Thumbnail />
+        <Thumbnail style={{ backgroundImage: `url(${getThumbnailUrl()})` }} />
         <Information>
           <Title>{youtube.title}</Title>
-          <Description>{youtube.url}</Description>
+          <Description>{youtube.videoId}</Description>
         </Information>
       </InformationContainer>
       <MenuButton
@@ -120,6 +124,9 @@ h-12
 bg-black
 rounded-sm
 mr-4
+bg-cover
+bg-no-repeat
+bg-center
 `;
 
 const Information = tw.div`
@@ -134,6 +141,10 @@ const Title = tw.h1`
 w-full
 text-xl
 font-light
+overflow-clip
+overflow-ellipsis
+break-words
+line-clamp-1
 `;
 
 const Description = tw.p`
