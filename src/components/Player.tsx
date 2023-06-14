@@ -4,11 +4,14 @@ import {
   BackwardIcon,
   ForwardIcon,
   ListBulletIcon,
+  PauseIcon,
   PlayIcon,
   SpeakerWaveIcon,
   WrenchIcon,
 } from "@heroicons/react/24/outline";
 import { IYoutube } from "../App";
+import YouTube, { YouTubeProps } from "react-youtube";
+import { useState } from "react";
 
 interface PlayerProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,15 +19,49 @@ interface PlayerProps {
 }
 
 export function Player({ setOnPlayer, playItem }: PlayerProps) {
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
+
+  const onPlayerReady: YouTubeProps["onReady"] = (event) => {
+    setYoutubePlayer(event.target);
+    event.target.playVideo();
+  };
+
+  const opts: YouTubeProps["opts"] = {
+    height: "336",
+    width: "448",
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
   const durationTextFormat = (text: string) => {};
 
   const getMaxResThumbnailUrl = () => {
     return `https://img.youtube.com/vi/${playItem.videoId}/maxresdefault.jpg`;
   };
 
+  const play = () => {
+    setIsPlaying(true);
+    youtubePlayer.playVideo();
+  };
+
+  const pause = () => {
+    setIsPlaying(false);
+    youtubePlayer.pauseVideo();
+  };
+
   return (
     <Container>
-      <Video style={{ backgroundImage: `url(${getMaxResThumbnailUrl()})` }} />
+      <VideoContainer
+        style={{ backgroundImage: `url(${getMaxResThumbnailUrl()})` }}
+      >
+        <YouTube
+          videoId={playItem.videoId}
+          opts={opts}
+          onReady={onPlayerReady}
+        />
+      </VideoContainer>
       <ProgressBar />
       <Playtime>
         <h1>00:00:00</h1>
@@ -32,7 +69,11 @@ export function Player({ setOnPlayer, playItem }: PlayerProps) {
       </Playtime>
       <Controller>
         <CustomBackwardIcon />
-        <CustomPlayIcon />
+        {isPlaying ? (
+          <CustomPauseIcon onClick={pause} />
+        ) : (
+          <CustomPlayIcon onClick={play} />
+        )}
         <CustomForwardIcon />
       </Controller>
       <Information>
@@ -66,7 +107,7 @@ rounded-lg
 bg-slate-50
 `;
 
-const Video = tw.div`
+const VideoContainer = tw.div`
 w-[28rem]
 h-[21rem]
 bg-black
@@ -100,6 +141,12 @@ items-center
 `;
 
 const CustomPlayIcon = tw(PlayIcon)`
+w-14
+h-14
+stroke-1
+`;
+
+const CustomPauseIcon = tw(PauseIcon)`
 w-14
 h-14
 stroke-1
