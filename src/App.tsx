@@ -66,6 +66,7 @@ function App() {
     },
   ]);
   const [playItem, setPlayItem] = useState<IYoutube | null>(null);
+  const [repeat, setRepeat] = useState<boolean>(true);
 
   useEffect(() => {
     const refreshBookmarkItems = refreshItems("youtubes", setYoutubes);
@@ -79,6 +80,9 @@ function App() {
   const goNext = () => {
     if (playItem === null) return;
     const index = youtubes.indexOf(playItem);
+    if (repeat) {
+      setPlayItem(youtubes[(index + 1) % youtubes.length]);
+    }
     if (index < youtubes.length - 1) {
       setPlayItem(youtubes[index + 1]);
     }
@@ -87,9 +91,17 @@ function App() {
   const goPrevious = () => {
     if (playItem === null) return;
     const index = youtubes.indexOf(playItem);
-    if (index > 0) {
-      setPlayItem(youtubes[index - 1]);
+    if (repeat) {
+      setPlayItem(youtubes[(index - 1 + youtubes.length) % youtubes.length]);
+    } else {
+      if (index > 0) {
+        setPlayItem(youtubes[index - 1]);
+      }
     }
+  };
+
+  const toggleRepeat = () => {
+    setRepeat(!repeat);
   };
 
   return (
@@ -114,6 +126,8 @@ function App() {
             playItem={playItem}
             goNext={goNext}
             goPrevious={goPrevious}
+            repeat={repeat}
+            toggleRepeat={toggleRepeat}
           />
         )}
       </Content>

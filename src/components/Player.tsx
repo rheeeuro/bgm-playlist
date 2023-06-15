@@ -22,6 +22,8 @@ interface PlayerProps {
   goPrevious: () => void;
   isFirst: boolean;
   isLast: boolean;
+  repeat: boolean;
+  toggleRepeat: () => void;
 }
 
 export function Player({
@@ -31,6 +33,8 @@ export function Player({
   goPrevious,
   isFirst,
   isLast,
+  repeat,
+  toggleRepeat,
 }: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
@@ -156,7 +160,7 @@ export function Player({
         <h1>{durationTextFormat(duration)}</h1>
       </Playtime>
       <Controller>
-        <Button disabled={isFirst}>
+        <Button disabled={isFirst && !repeat}>
           <CustomBackwardIcon onClick={goPrevious} />
         </Button>
         {isPlaying ? (
@@ -168,7 +172,7 @@ export function Player({
             <CustomPlayIcon onClick={play} />
           </Button>
         )}
-        <Button disabled={isLast}>
+        <Button disabled={isLast && !repeat}>
           <CustomForwardIcon onClick={goNext} />
         </Button>
       </Controller>
@@ -182,7 +186,7 @@ export function Player({
         ) : (
           <CustomSpeakerWaveIcon onClick={mute} />
         )}
-        <CustomArrowPathIcon />
+        <CustomArrowPathIcon onClick={toggleRepeat} $repeat={repeat} />
         <CustomArrowTopRightOnSquareIcon onClick={redirectYoutube} />
         <CustomListBulletIcon
           onClick={() => {
@@ -321,9 +325,10 @@ w-6
 h-6
 `;
 
-const CustomArrowPathIcon = tw(ArrowPathIcon)`
+const CustomArrowPathIcon = tw(ArrowPathIcon)<{ $repeat: boolean }>`
 w-6
 h-6
+${(p) => (p.$repeat ? "text-pink-600" : "text-black")}
 `;
 
 const CustomArrowTopRightOnSquareIcon = tw(ArrowTopRightOnSquareIcon)`
