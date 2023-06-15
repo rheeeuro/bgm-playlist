@@ -108,6 +108,8 @@ function App() {
         {onPlayer && playItem && (
           <Player
             key={playItem.id}
+            isFirst={youtubes.indexOf(playItem) === 0}
+            isLast={youtubes.indexOf(playItem) === youtubes.length - 1}
             setOnPlayer={setOnPlayer}
             playItem={playItem}
             goNext={goNext}

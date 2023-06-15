@@ -1,5 +1,6 @@
 import tw from "tailwind-styled-components";
 import {
+  ArrowPathIcon,
   ArrowTopRightOnSquareIcon,
   BackwardIcon,
   ForwardIcon,
@@ -8,7 +9,6 @@ import {
   PlayIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
-  WrenchIcon,
 } from "@heroicons/react/24/outline";
 import { IYoutube } from "../App";
 import YouTube, { YouTubeProps } from "react-youtube";
@@ -20,6 +20,8 @@ interface PlayerProps {
   playItem: IYoutube;
   goNext: () => void;
   goPrevious: () => void;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
 export function Player({
@@ -27,20 +29,29 @@ export function Player({
   playItem,
   goNext,
   goPrevious,
+  isFirst,
+  isLast,
 }: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [youtubePlayer, setYoutubePlayer] = useState<any>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
-
-  let interval: string | number | NodeJS.Timeout | undefined;
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log(currentTime);
+  }, [currentTime]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (youtubePlayer === null) return;
+      setCurrentTime(youtubePlayer.getCurrentTime());
+    }, 500);
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [youtubePlayer]);
 
   useEffect(() => {
     setCurrentTime(0);
@@ -50,13 +61,14 @@ export function Player({
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setYoutubePlayer(event.target);
     event.target.playVideo();
-    interval = setInterval(() => {
-      const time = event.target.getCurrentTime();
-      if (time !== 0) {
-        setCurrentTime(event.target.getCurrentTime());
-      }
-    }, 1000);
     setDuration(event.target.getDuration());
+  };
+
+  const onPlayerStateChange: YouTubeProps["onStateChange"] = (event) => {
+    if (event.data === 0) {
+      // ended
+      goNext();
+    }
   };
 
   const opts: YouTubeProps["opts"] = {
@@ -108,7 +120,13 @@ export function Player({
   };
 
   const seekTo = (event: React.ChangeEvent<HTMLInputElement>) => {
-    youtubePlayer.seekTo(event.target.value);
+    const time = parseInt(event.target.value);
+    youtubePlayer.seekTo(time);
+    setCurrentTime(time);
+  };
+
+  const redirectYoutube = () => {
+    window.open(`https://youtu.be/${playItem.videoId}`);
   };
 
   return (
@@ -122,6 +140,7 @@ export function Player({
           onReady={onPlayerReady}
           onPlay={play}
           onPause={pause}
+          onStateChange={onPlayerStateChange}
         />
       </VideoContainer>
       <ProgressBar
@@ -137,13 +156,21 @@ export function Player({
         <h1>{durationTextFormat(duration)}</h1>
       </Playtime>
       <Controller>
-        <CustomBackwardIcon onClick={goPrevious} />
+        <Button disabled={isFirst}>
+          <CustomBackwardIcon onClick={goPrevious} />
+        </Button>
         {isPlaying ? (
-          <CustomPauseIcon onClick={pause} />
+          <Button>
+            <CustomPauseIcon onClick={pause} />
+          </Button>
         ) : (
-          <CustomPlayIcon onClick={play} />
+          <Button>
+            <CustomPlayIcon onClick={play} />
+          </Button>
         )}
-        <CustomForwardIcon onClick={goNext} />
+        <Button disabled={isLast}>
+          <CustomForwardIcon onClick={goNext} />
+        </Button>
       </Controller>
       <Information>
         <Title>{playItem.title}</Title>
@@ -155,8 +182,8 @@ export function Player({
         ) : (
           <CustomSpeakerWaveIcon onClick={mute} />
         )}
-        <CustomWrenchIcon />
-        <CustomArrowTopRightOnSquareIcon />
+        <CustomArrowPathIcon />
+        <CustomArrowTopRightOnSquareIcon onClick={redirectYoutube} />
         <CustomListBulletIcon
           onClick={() => {
             setOnPlayer(false);
@@ -215,6 +242,10 @@ h-28
 flex
 justify-around
 items-center
+`;
+
+const Button = tw.button`
+disabled:text-slate-600/50
 `;
 
 const CustomPlayIcon = tw(PlayIcon)`
@@ -279,21 +310,24 @@ items-center
 `;
 
 const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
+cursor-pointer
 w-6
 h-6
 `;
 
 const CustomSpeakerXMarkIcon = tw(SpeakerXMarkIcon)`
+cursor-pointer
 w-6
 h-6
 `;
 
-const CustomWrenchIcon = tw(WrenchIcon)`
+const CustomArrowPathIcon = tw(ArrowPathIcon)`
 w-6
 h-6
 `;
 
 const CustomArrowTopRightOnSquareIcon = tw(ArrowTopRightOnSquareIcon)`
+cursor-pointer
 w-6
 h-6
 `;
