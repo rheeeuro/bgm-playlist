@@ -9,9 +9,16 @@ import { getThumbnailUrl } from "../utils/text";
 interface PlaylistItemProps {
   onClick: () => void;
   youtube: IYoutube;
+  setYoutubes: React.Dispatch<React.SetStateAction<IYoutube[]>>;
+  youtubes: IYoutube[];
 }
 
-export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
+export function PlaylistItem({
+  onClick,
+  youtube,
+  setYoutubes,
+  youtubes,
+}: PlaylistItemProps) {
   const {
     register,
     handleSubmit,
@@ -58,19 +65,51 @@ export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
     console.log(errors);
   };
 
-  const deleteBookmark = (
+  const moveUp = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setYoutubes((prev) => {
+      const index = prev.indexOf(youtube);
+      const newOne = [
+        ...prev.slice(0, index - 1),
+        prev[index],
+        prev[index - 1],
+        ...prev.slice(index + 1, prev.length),
+      ];
+      return newOne;
+    });
+  };
+
+  const moveDown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setYoutubes((prev) => {
+      const index = prev.indexOf(youtube);
+      const newOne = [
+        ...prev.slice(0, index),
+        prev[index + 1],
+        prev[index],
+        ...prev.slice(index + 2, prev.length),
+      ];
+      return newOne;
+    });
+  };
+
+  const modifyYoutube = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {};
+
+  const deleteYoutube = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    // e.stopPropagation();
-    // const confirm = window.confirm(
-    //   `Are you sure you want to delete [${bookmark.title}]?`
-    // );
-    // if (!confirm) return;
-    // setBookmarkItems((prev) => {
-    //   const newOne = prev.filter((item) => item !== bookmark);
-    //   localStorage.setItem("bookmarks", JSON.stringify(newOne));
-    //   return newOne;
-    // });
+    e.stopPropagation();
+
+    const confirm = window.confirm(
+      `Are you sure you want to delete [${youtube.title}]?`
+    );
+    if (!confirm) return;
+
+    setYoutubes((prev) => {
+      const newOne = prev.filter((item) => item !== youtube);
+      localStorage.setItem("youtubes", JSON.stringify(newOne));
+      return newOne;
+    });
   };
 
   return (
@@ -96,7 +135,16 @@ export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
         }}
       >
         <CustomEllipsisVerticalIcon />
-        {open && <PlaylistItemDropdown />}
+        {open && (
+          <PlaylistItemDropdown
+            moveUp={moveUp}
+            moveDown={moveDown}
+            modifyYoutube={modifyYoutube}
+            deleteYoutube={deleteYoutube}
+            isFirst={youtubes.indexOf(youtube) === 0}
+            isLast={youtubes.indexOf(youtube) === youtubes.length - 1}
+          />
+        )}
       </MenuButton>
     </Container>
   );

@@ -61,7 +61,9 @@ export function Modal({
             if (registerProp.name === "id") return null;
             return (
               <ModalInputRow key={registerProp.name}>
-                <h1>{registerProp.name.toUpperCase()}</h1>
+                <ModalInputTitle>
+                  {registerProp.name.toUpperCase()}
+                </ModalInputTitle>
                 <ModalInput {...registerProp} autoFocus={index === 0} />
               </ModalInputRow>
             );
@@ -105,8 +107,9 @@ items-center
 bg-slate-400
 rounded-tl-xl
 rounded-tr-xl
-text-lg
-font-medium
+text-md
+font-thin
+tracking-widest
 `;
 
 const ModalContent = tw.div`
@@ -130,6 +133,12 @@ justify-between
 text-base
 font-medium
 p-4
+`;
+
+const ModalInputTitle = tw.h1`
+text-md
+font-thin
+tracking-widest
 `;
 
 const ModalInput = tw.input`
@@ -177,7 +186,7 @@ h-8
 rounded-md
 shadow-md
 text-center
-font-normal
+font-thin
 text-sm
 bg-green-400/10
 text-gray-800

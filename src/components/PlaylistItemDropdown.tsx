@@ -7,26 +7,37 @@ import {
 import tw from "tailwind-styled-components";
 
 interface PlaylistItemDropdownProps {
-  modifyBookmark: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  deleteBookmark: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  moveUp: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  moveDown: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  modifyYoutube: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  deleteYoutube: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
-export function PlaylistItemDropdown() {
+export function PlaylistItemDropdown({
+  moveUp,
+  moveDown,
+  modifyYoutube,
+  deleteYoutube,
+  isFirst,
+  isLast,
+}: PlaylistItemDropdownProps) {
   return (
-    <Container>
-      <Button onClick={() => {}}>
+    <Container $isLast={isLast}>
+      <Button onClick={moveUp} disabled={isFirst}>
         <CustomArrowUpIcon />
         <Text>Move Up</Text>
       </Button>
-      <Button onClick={() => {}}>
+      <Button onClick={moveDown} disabled={isLast}>
         <CustomArrowDownIcon />
         <Text>Move Down</Text>
       </Button>
-      <Button onClick={() => {}}>
+      <Button onClick={modifyYoutube}>
         <CustomPencilIcon />
         <Text>Modify</Text>
       </Button>
-      <Button onClick={() => {}}>
+      <Button onClick={deleteYoutube}>
         <CustomTrashIcon />
         <Text>Delete</Text>
       </Button>
@@ -34,7 +45,7 @@ export function PlaylistItemDropdown() {
   );
 }
 
-const Container = tw.div`
+const Container = tw.div<{ $isLast: boolean }>`
 absolute
 flex
 flex-col
@@ -43,15 +54,15 @@ items-center
 z-10
 w-32
 h-32
-top-3
+${(p) => (p.$isLast ? "bottom-3" : "top-3")}
 right-3
 text-xs
 font-normal
 bg-slate-200
 dark:bg-slate-500
 rounded-md
-origin-top-right
-shadow-lg
+${(p) => (p.$isLast ? "origin-bottom-right" : "origin-top-right")}
+shadow-xl
 `;
 
 const Button = tw.button`
@@ -63,6 +74,7 @@ items-center
 space-x-4
 text-md
 text-slate-700
+disabled:text-slate-400
 dark:text-slate-100
 hover:bg-slate-700/30
 `;
