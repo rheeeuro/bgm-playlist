@@ -5,6 +5,7 @@ import Player from "./components/Player";
 import { useEffect, useState } from "react";
 import Playlist from "./components/Playlist";
 import { refreshItems } from "./utils/localstorage";
+import { getMaxResThumbnailUrl } from "./utils/text";
 
 export interface IYoutube {
   id: string;
@@ -65,7 +66,7 @@ function App() {
       videoId: "gIIzk2B7ruw",
     },
   ]);
-  const [playItem, setPlayItem] = useState<IYoutube | null>(null);
+  const [playItem, setPlayItem] = useState<IYoutube>(youtubes[0]);
   const [repeat, setRepeat] = useState<boolean>(true);
 
   useEffect(() => {
@@ -76,6 +77,12 @@ function App() {
       window.removeEventListener("storage", refreshBookmarkItems);
     };
   }, []);
+
+  useEffect(() => {
+    document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl(
+      playItem.videoId
+    )}')`;
+  }, [playItem]);
 
   const goNext = () => {
     if (playItem === null) return;

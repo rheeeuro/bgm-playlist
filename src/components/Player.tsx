@@ -13,7 +13,7 @@ import {
 import { IYoutube } from "../App";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
-import { formatText } from "../utils/text";
+import { durationTextFormat, getMaxResThumbnailUrl } from "../utils/text";
 
 interface PlayerProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
@@ -59,7 +59,6 @@ export function Player({
 
   useEffect(() => {
     setCurrentTime(0);
-    document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl()}')`;
   }, [playItem.videoId]);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
@@ -82,25 +81,6 @@ export function Player({
       autoplay: 1,
       controls: 0,
     },
-  };
-
-  const durationTextFormat = (duration: number) => {
-    let time = Math.floor(duration);
-    const hours = Math.floor(time / 3600);
-    time -= hours * 3600;
-    const minutes = Math.floor(time / 60);
-    time -= minutes * 60;
-    const seconds = time;
-
-    if (duration >= 3600)
-      return `${formatText(hours)}:${formatText(minutes)}:${formatText(
-        seconds
-      )}`;
-    else return `${formatText(minutes)}:${formatText(seconds)}`;
-  };
-
-  const getMaxResThumbnailUrl = () => {
-    return `https://img.youtube.com/vi/${playItem.videoId}/maxresdefault.jpg`;
   };
 
   const play = () => {
@@ -136,7 +116,9 @@ export function Player({
   return (
     <Container>
       <VideoContainer
-        style={{ backgroundImage: `url(${getMaxResThumbnailUrl()})` }}
+        style={{
+          backgroundImage: `url(${getMaxResThumbnailUrl(playItem.videoId)})`,
+        }}
       >
         <YouTube
           videoId={playItem.videoId}

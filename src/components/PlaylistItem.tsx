@@ -4,6 +4,7 @@ import tw from "tailwind-styled-components";
 import PlaylistItemDropdown from "./PlaylistItemDropdown";
 import { IYoutube } from "../App";
 import { FieldErrors, useForm } from "react-hook-form";
+import { getThumbnailUrl } from "../utils/text";
 
 interface PlaylistItemProps {
   onClick: () => void;
@@ -72,14 +73,14 @@ export function PlaylistItem({ onClick, youtube }: PlaylistItemProps) {
     // });
   };
 
-  const getThumbnailUrl = () => {
-    return `https://img.youtube.com/vi/${youtube.videoId}/default.jpg`;
-  };
-
   return (
     <Container onClick={onClick}>
       <InformationContainer>
-        <Thumbnail style={{ backgroundImage: `url(${getThumbnailUrl()})` }} />
+        <Thumbnail
+          style={{
+            backgroundImage: `url(${getThumbnailUrl(youtube.videoId)})`,
+          }}
+        />
         <Information>
           <Title>{youtube.title}</Title>
           <Description>{youtube.originalTitle}</Description>
