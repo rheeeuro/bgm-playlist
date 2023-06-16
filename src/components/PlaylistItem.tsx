@@ -257,7 +257,7 @@ line-clamp-1
 text-slate-900/50
 `;
 
-const MenuButton = tw.div`
+const MenuButton = tw.button`
 w-6
 h-6
 relative

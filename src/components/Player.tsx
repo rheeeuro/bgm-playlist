@@ -239,9 +239,8 @@ export function Player({
 }
 
 export const Container = tw.div`
-my-10
-w-[28rem]
-h-[40rem]
+w-full
+h-full
 flex
 flex-col
 justify-between
