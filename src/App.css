@@ -16,7 +16,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(60px);
 }
 
 div::-webkit-scrollbar {
