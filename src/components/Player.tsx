@@ -45,10 +45,6 @@ export function Player({
   const [volume, setVolume] = useState<number>(100);
 
   useEffect(() => {
-    console.log(currentTime);
-  }, [currentTime]);
-
-  useEffect(() => {
     const interval = setInterval(() => {
       if (youtubePlayer === null) return;
       setCurrentTime(youtubePlayer.getCurrentTime());

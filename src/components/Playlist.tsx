@@ -12,8 +12,8 @@ interface PlaylistProps {
   setOnPlayer: React.Dispatch<React.SetStateAction<boolean>>;
   youtubes: IYoutube[];
   setYoutubes: React.Dispatch<React.SetStateAction<IYoutube[]>>;
-  playItem: IYoutube;
-  setPlayItem: React.Dispatch<React.SetStateAction<IYoutube>>;
+  playItem: IYoutube | undefined;
+  setPlayItem: React.Dispatch<React.SetStateAction<IYoutube | undefined>>;
 }
 
 interface NewYoutubeProps {

@@ -85,6 +85,7 @@ export function PlaylistItem({
         prev[index - 1],
         ...prev.slice(index + 1, prev.length),
       ];
+      localStorage.setItem("youtubes", JSON.stringify(newOne));
       return newOne;
     });
   };
@@ -98,6 +99,7 @@ export function PlaylistItem({
         prev[index],
         ...prev.slice(index + 2, prev.length),
       ];
+      localStorage.setItem("youtubes", JSON.stringify(newOne));
       return newOne;
     });
   };
