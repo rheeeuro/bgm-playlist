@@ -4,7 +4,10 @@ function Footer() {
   return (
     <Container>
       <Text>
-        {"Copyright"} &copy; {`${new Date().getFullYear()} rheeeuro`}{" "}
+        {"Copyright"} &copy; {`${new Date().getFullYear()} `}
+        <Link href="https://github.com/rheeeuro/bgm-playlist">
+          {"rheeeuro"}
+        </Link>
       </Text>
     </Container>
   );
@@ -19,7 +22,9 @@ right-5
 const Text = tw.h1`
 font-thin
 text-sm
-text-slate-900/40
+text-slate-50/40
 `;
+
+const Link = tw.a``;
 
 export default Footer;
