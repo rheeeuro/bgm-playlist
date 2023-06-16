@@ -266,7 +266,7 @@ overflow-hidden
 const ProgressBar = tw.input`
 w-full
 h-1
-bg-pink-500
+accent-pink-600
 `;
 
 const Playtime = tw.div`
@@ -383,6 +383,7 @@ origin-top-left
 const VolumeBar = tw.input`
 w-full
 h-full
+accent-pink-600
 `;
 
 const CustomArrowPathIcon = tw(ArrowPathIcon)<{ $repeat: boolean }>`
