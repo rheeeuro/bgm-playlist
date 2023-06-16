@@ -9,6 +9,7 @@ import {
   PlayIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
+  ViewfinderCircleIcon,
 } from "@heroicons/react/24/outline";
 import { IYoutube } from "../App";
 import YouTube, { YouTubeProps } from "react-youtube";
@@ -114,13 +115,15 @@ export function Player({
     unMute();
   };
 
-  const redirectYoutube = () => {
-    // window.open(`https://youtu.be/${playItem.videoId}`);
-    const player = document.getElementById("movie_player");
-    if (player) {
-      console.log(player);
+  const fullscreen = () => {
+    const player = youtubePlayer.getIframe();
+    if (player && player.requestFullscreen) {
       player.requestFullscreen();
     }
+  };
+
+  const redirectYoutube = () => {
+    window.open(`https://youtu.be/${playItem.videoId}`);
   };
 
   return (
@@ -146,6 +149,7 @@ export function Player({
         step={1}
         value={currentTime}
         onInput={seekTo}
+        disabled={youtubePlayer === null}
       />
       <Playtime>
         <h1>{durationTextFormat(currentTime)}</h1>
@@ -156,12 +160,12 @@ export function Player({
           <CustomBackwardIcon onClick={goPrevious} />
         </Button>
         {isPlaying ? (
-          <Button>
-            <CustomPauseIcon onClick={pause} />
+          <Button disabled={youtubePlayer === null} onClick={pause}>
+            <CustomPauseIcon />
           </Button>
         ) : (
-          <Button>
-            <CustomPlayIcon onClick={play} />
+          <Button disabled={youtubePlayer === null} onClick={play}>
+            <CustomPlayIcon />
           </Button>
         )}
         <Button disabled={isLast && !repeat}>
@@ -173,7 +177,9 @@ export function Player({
         <Description>{playItem.originalTitle}</Description>
       </Information>
       <Toolbar>
-        <VolumeButton
+        <ToolbarButton
+          title="volume"
+          disabled={youtubePlayer === null}
           onMouseLeave={() => {
             setOpen(false);
           }}
@@ -205,14 +211,28 @@ export function Player({
               />
             </VolumeBarContainer>
           )}
-        </VolumeButton>
-        <CustomArrowPathIcon onClick={toggleRepeat} $repeat={repeat} />
-        <CustomArrowTopRightOnSquareIcon onClick={redirectYoutube} />
-        <CustomListBulletIcon
+        </ToolbarButton>
+        <ToolbarButton title="repeat" onClick={toggleRepeat}>
+          <CustomArrowPathIcon $repeat={repeat} />
+        </ToolbarButton>
+        <ToolbarButton
+          title="fullscreen"
+          onClick={fullscreen}
+          disabled={youtubePlayer === null}
+        >
+          <CustomViewfinderCircleIcon />
+        </ToolbarButton>
+        <ToolbarButton title="redirect" onClick={redirectYoutube}>
+          <CustomArrowTopRightOnSquareIcon />
+        </ToolbarButton>
+        <ToolbarButton
+          title="playlist"
           onClick={() => {
             setOnPlayer(false);
           }}
-        />
+        >
+          <CustomListBulletIcon />
+        </ToolbarButton>
       </Toolbar>
     </Container>
   );
@@ -317,7 +337,7 @@ text-slate-900
 const Description = tw.p`
 font-thin
 text-sm
-px-2
+px-4
 overflow-clip
 overflow-ellipsis
 break-words
@@ -333,20 +353,20 @@ justify-around
 items-center
 `;
 
-const VolumeButton = tw.div`
+const ToolbarButton = tw.button`
 w-6
 h-6
 relative
+cursor-pointer
+disabled:text-slate-600/50
 `;
 
 const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
-cursor-pointer
 w-6
 h-6
 `;
 
 const CustomSpeakerXMarkIcon = tw(SpeakerXMarkIcon)`
-cursor-pointer
 w-6
 h-6
 `;
@@ -371,8 +391,12 @@ h-6
 ${(p) => (p.$repeat ? "text-pink-600" : "text-black")}
 `;
 
+const CustomViewfinderCircleIcon = tw(ViewfinderCircleIcon)`
+w-6
+h-6
+`;
+
 const CustomArrowTopRightOnSquareIcon = tw(ArrowTopRightOnSquareIcon)`
-cursor-pointer
 w-6
 h-6
 `;
@@ -380,7 +404,6 @@ h-6
 const CustomListBulletIcon = tw(ListBulletIcon)`
 w-6
 h-6
-cursor-pointer
 `;
 
 export default Player;
