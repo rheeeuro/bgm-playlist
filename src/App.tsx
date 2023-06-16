@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Playlist from "./components/Playlist";
 import { refreshItems } from "./utils/localstorage";
 import { getMaxResThumbnailUrl } from "./utils/text";
+import Footer from "./components/Footer";
 
 export interface IYoutube {
   id: string;
@@ -103,6 +104,7 @@ function App() {
           />
         )}
       </Content>
+      <Footer />
     </Container>
   );
 }
