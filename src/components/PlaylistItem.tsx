@@ -4,13 +4,20 @@ import tw from "tailwind-styled-components";
 import PlaylistItemDropdown from "./PlaylistItemDropdown";
 import { IYoutube } from "../App";
 import { FieldErrors, useForm } from "react-hook-form";
-import { getThumbnailUrl } from "../utils/text";
+import { getThumbnailUrl, getVideoIdFromUrl } from "../utils/text";
+import Modal from "./Modal";
 
 interface PlaylistItemProps {
   onClick: () => void;
   youtube: IYoutube;
   setYoutubes: React.Dispatch<React.SetStateAction<IYoutube[]>>;
   youtubes: IYoutube[];
+}
+
+interface ModifyYoutubeProps {
+  id: string;
+  title: string;
+  url: string;
 }
 
 export function PlaylistItem({
@@ -25,7 +32,7 @@ export function PlaylistItem({
     setValue,
     reset,
     formState: { errors },
-  } = useForm<IYoutube>();
+  } = useForm<ModifyYoutubeProps>();
   const [open, setOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -34,31 +41,35 @@ export function PlaylistItem({
     setModalOpen(false);
   };
 
-  const modifyBookmark = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
-    // setValue("id", bookmark.id);
-    setModalOpen(true);
-  };
-
-  const onValid = (data: IYoutube) => {
-    // setBookmarkItems((prev) => {
-    //   const newOne = prev.map((item) => {
-    //     if (item.id === data.id) {
-    //       return {
-    //         ...item,
-    //         title: data.title,
-    //         url: data.url,
-    //       };
-    //     } else {
-    //       return item;
-    //     }
-    //   });
-    //   localStorage.setItem("bookmarks", JSON.stringify(newOne));
-    //   return newOne;
-    // });
-    closeModal();
+  const onValid = async (data: ModifyYoutubeProps) => {
+    let originalTitle = "";
+    try {
+      const response = await fetch(
+        `https://noembed.com/embed?dataType=json&url=${data.url}`
+      );
+      const json = await response.json();
+      originalTitle = json.title;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setYoutubes((prev) => {
+        const newOne = prev.map((item) => {
+          if (item.id === data.id) {
+            return {
+              ...item,
+              title: data.title,
+              videoId: getVideoIdFromUrl(data.url),
+              originalTitle,
+            };
+          } else {
+            return item;
+          }
+        });
+        localStorage.setItem("youtubes", JSON.stringify(newOne));
+        return newOne;
+      });
+      closeModal();
+    }
   };
 
   const onInValid = (errors: FieldErrors) => {
@@ -93,7 +104,11 @@ export function PlaylistItem({
 
   const modifyYoutube = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {};
+  ) => {
+    e.stopPropagation();
+    setValue("id", youtube.id);
+    setModalOpen(true);
+  };
 
   const deleteYoutube = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -113,7 +128,12 @@ export function PlaylistItem({
   };
 
   return (
-    <Container onClick={onClick}>
+    <Container
+      onClick={() => {
+        if (modalOpen) return;
+        onClick();
+      }}
+    >
       <InformationContainer>
         <Thumbnail
           style={{
@@ -146,6 +166,32 @@ export function PlaylistItem({
           />
         )}
       </MenuButton>
+      <Modal
+        title={"Modify Youtube"}
+        open={modalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleSubmit}
+        onValid={onValid}
+        onInValid={onInValid}
+        registerProps={[
+          {
+            ...register("title", { required: "Title is required" }),
+            defaultValue: youtube.title,
+          },
+          {
+            ...register("url", {
+              required: "URL is required",
+              validate: {
+                validUrl: (value) =>
+                  value.startsWith("https://") ||
+                  "URL should begin with [ 'https://' ]",
+              },
+            }),
+            defaultValue: `https://youtu.be/${youtube.videoId}`,
+          },
+        ]}
+        errors={errors}
+      />
     </Container>
   );
 }

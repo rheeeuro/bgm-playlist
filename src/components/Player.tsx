@@ -42,6 +42,7 @@ export function Player({
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(100);
 
   useEffect(() => {
     console.log(currentTime);
@@ -65,6 +66,7 @@ export function Player({
     setYoutubePlayer(event.target);
     event.target.playVideo();
     setDuration(event.target.getDuration());
+    setVolume(event.target.getVolume());
   };
 
   const onPlayerStateChange: YouTubeProps["onStateChange"] = (event) => {
@@ -107,6 +109,12 @@ export function Player({
     const time = parseInt(event.target.value);
     youtubePlayer.seekTo(time);
     setCurrentTime(time);
+  };
+
+  const changeVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(event.target.value);
+    youtubePlayer.setVolume(value);
+    setVolume(value);
   };
 
   const redirectYoutube = () => {
@@ -163,11 +171,39 @@ export function Player({
         <Description>{playItem.originalTitle}</Description>
       </Information>
       <Toolbar>
-        {isMuted ? (
-          <CustomSpeakerXMarkIcon onClick={unMute} />
-        ) : (
-          <CustomSpeakerWaveIcon onClick={mute} />
-        )}
+        <VolumeButton
+          onMouseLeave={() => {
+            setOpen(false);
+          }}
+        >
+          {isMuted ? (
+            <CustomSpeakerXMarkIcon
+              onClick={unMute}
+              onMouseEnter={() => {
+                setOpen(true);
+              }}
+            />
+          ) : (
+            <CustomSpeakerWaveIcon
+              onClick={mute}
+              onMouseEnter={() => {
+                setOpen(true);
+              }}
+            />
+          )}
+          {open && (
+            <VolumeBarContainer>
+              <VolumeBar
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                onInput={changeVolume}
+                value={volume}
+              />
+            </VolumeBarContainer>
+          )}
+        </VolumeButton>
         <CustomArrowPathIcon onClick={toggleRepeat} $repeat={repeat} />
         <CustomArrowTopRightOnSquareIcon onClick={redirectYoutube} />
         <CustomListBulletIcon
@@ -295,6 +331,12 @@ justify-around
 items-center
 `;
 
+const VolumeButton = tw.div`
+w-6
+h-6
+relative
+`;
+
 const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
 cursor-pointer
 w-6
@@ -305,6 +347,20 @@ const CustomSpeakerXMarkIcon = tw(SpeakerXMarkIcon)`
 cursor-pointer
 w-6
 h-6
+`;
+
+const VolumeBarContainer = tw.div`
+absolute
+w-20
+h-4
+bottom-2
+origin-top-left
+-rotate-90
+`;
+
+const VolumeBar = tw.input`
+w-full
+h-full
 `;
 
 const CustomArrowPathIcon = tw(ArrowPathIcon)<{ $repeat: boolean }>`

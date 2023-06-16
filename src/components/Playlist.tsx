@@ -123,7 +123,8 @@ export function Playlist({
               required: "URL is required",
               validate: {
                 validUrl: (value) =>
-                  value.startsWith("https://") || "Invalid youtube URL",
+                  value.startsWith("https://") ||
+                  "URL should begin with [ 'https://' ]",
               },
             }),
           },
