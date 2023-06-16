@@ -111,10 +111,16 @@ export function Player({
     const value = parseInt(event.target.value);
     youtubePlayer.setVolume(value);
     setVolume(value);
+    unMute();
   };
 
   const redirectYoutube = () => {
-    window.open(`https://youtu.be/${playItem.videoId}`);
+    // window.open(`https://youtu.be/${playItem.videoId}`);
+    const player = document.getElementById("movie_player");
+    if (player) {
+      console.log(player);
+      player.requestFullscreen();
+    }
   };
 
   return (
