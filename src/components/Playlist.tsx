@@ -144,7 +144,7 @@ items-center
 justify-between
 px-4
 space-x-4
-bg-slate-200
+bg-pink-600/10
 `;
 
 const TitleContainer = tw.div`
@@ -152,7 +152,6 @@ w-full
 h-14
 flex
 items-center
-
 `;
 
 const BackButton = tw.button`
@@ -160,7 +159,8 @@ w-6
 h-6
 rounded-md
 mr-4
-bg-slate-300
+bg-pink-600/20
+
 `;
 
 const CustomArrowUturnLeftIcon = tw(ArrowUturnLeftIcon)`
@@ -168,13 +168,16 @@ w-6
 h-6
 p-1
 cursor-pointer
-
+text-slate-700
+hover:text-pink-600
 `;
 
 const CustomPlusIcon = tw(PlusIcon)`
 cursor-pointer
 w-6
 h-6
+text-slate-700
+hover:text-pink-600
 `;
 
 const Title = tw.h1`

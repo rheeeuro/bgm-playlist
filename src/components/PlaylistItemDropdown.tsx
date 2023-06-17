@@ -58,8 +58,7 @@ ${(p) => (p.$isLast ? "bottom-3" : "top-3")}
 right-3
 text-xs
 font-normal
-bg-slate-200
-dark:bg-slate-500
+bg-pink-50
 rounded-md
 ${(p) => (p.$isLast ? "origin-bottom-right" : "origin-top-right")}
 shadow-xl
@@ -75,8 +74,7 @@ space-x-4
 text-md
 text-slate-700
 disabled:text-slate-400
-dark:text-slate-100
-hover:bg-slate-700/30
+enabled:hover:bg-pink-600/10
 `;
 
 const CustomPencilIcon = tw(PencilIcon)`

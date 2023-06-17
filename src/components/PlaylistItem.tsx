@@ -202,7 +202,7 @@ const Container = tw.div`
 w-full
 h-24
 px-4
-border-t-2
+border-t-[1px]
 flex
 justify-between
 items-center
@@ -266,6 +266,8 @@ relative
 const CustomEllipsisVerticalIcon = tw(EllipsisVerticalIcon)`
 w-6
 h-6
+text-slate-700
+hover:text-pink-600
 `;
 
 export default PlaylistItem;

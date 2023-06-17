@@ -289,6 +289,8 @@ items-center
 
 const Button = tw.button`
 disabled:text-slate-600/50
+text-slate-700
+hover:text-pink-600
 `;
 
 const CustomPlayIcon = tw(PlayIcon)`
@@ -358,6 +360,8 @@ h-6
 relative
 cursor-pointer
 disabled:text-slate-600/50
+text-slate-700
+hover:text-pink-600
 `;
 
 const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
@@ -388,7 +392,10 @@ accent-pink-600
 const CustomArrowPathIcon = tw(ArrowPathIcon)<{ $repeat: boolean }>`
 w-6
 h-6
-${(p) => (p.$repeat ? "text-pink-600" : "text-black")}
+${(p) =>
+  p.$repeat
+    ? "text-pink-600 hover:text-slate-700"
+    : "text-slate-700 hover:text-pink-600"}
 `;
 
 const CustomViewfinderCircleIcon = tw(ViewfinderCircleIcon)`

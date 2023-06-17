@@ -64,7 +64,11 @@ export function Modal({
                 <ModalInputTitle>
                   {registerProp.name.toUpperCase()}
                 </ModalInputTitle>
-                <ModalInput {...registerProp} autoFocus={index === 0} />
+                <ModalInput
+                  {...registerProp}
+                  autoFocus={index === 0}
+                  spellcheck="false"
+                />
               </ModalInputRow>
             );
           })}
@@ -90,7 +94,7 @@ m-auto
 outline-none
 rounded-xl
 shadow-xl
-bg-slate-300
+bg-slate-100
 `;
 
 const ModalForm = tw.form`
@@ -104,7 +108,7 @@ h-12
 flex
 justify-center
 items-center
-bg-slate-400
+bg-slate-300
 rounded-tl-xl
 rounded-tr-xl
 text-md
@@ -142,10 +146,16 @@ tracking-widest
 `;
 
 const ModalInput = tw.input`
-ring-slate-600
 shadow-md
 rounded-sm
 w-64
+text-md
+font-light
+px-2
+focus:outline-none
+focus:border-pink-500
+focus:ring-1
+focus:ring-pink-500
 `;
 
 const ModalCancelButton = tw.button`
@@ -169,7 +179,7 @@ h-5
 const ModalButtonRow = tw.div`
 w-full
 h-12
-bg-slate-400/30
+bg-slate-300
 rounded-br-xl
 rounded-bl-xl
 flex
@@ -177,6 +187,8 @@ flex-row
 justify-between
 items-center
 px-5
+text-sm
+font-thin
 text-red-700
 `;
 
@@ -188,7 +200,7 @@ shadow-md
 text-center
 font-thin
 text-sm
-bg-green-400/10
+bg-green-300/20
 text-gray-800
 `;
 
