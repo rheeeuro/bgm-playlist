@@ -165,7 +165,7 @@ export function PlaylistItem({
             deleteYoutube={deleteYoutube}
             isFirst={youtubes.indexOf(youtube) === 0}
             isLast={youtubes.indexOf(youtube) === youtubes.length - 1}
-            indexOverSix={youtubes.indexOf(youtube) >= 6}
+            indexOverSix={youtubes.indexOf(youtube) >= 5}
           />
         )}
       </MenuButton>

@@ -26,7 +26,7 @@ export function PlaylistItemDropdown({
   indexOverSix,
 }: PlaylistItemDropdownProps) {
   return (
-    <Container $bottomOrigin={indexOverSix && isLast}>
+    <Container $indexOverSix={indexOverSix}>
       <Button onClick={moveUp} disabled={isFirst}>
         <CustomArrowUpIcon />
         <Text>Move Up</Text>
@@ -47,7 +47,7 @@ export function PlaylistItemDropdown({
   );
 }
 
-const Container = tw.div<{ $bottomOrigin: boolean }>`
+const Container = tw.div<{ $indexOverSix: boolean }>`
 absolute
 flex
 flex-col
@@ -56,14 +56,14 @@ items-center
 z-10
 w-32
 h-32
-${(p) => (p.$bottomOrigin ? "bottom-3" : "top-3")}
+${(p) => (p.$indexOverSix ? "bottom-3" : "top-3")}
 right-3
 text-xs
 font-normal
 bg-pink-50
 dark:bg-slate-800
 rounded-md
-${(p) => (p.$bottomOrigin ? "origin-bottom-right" : "origin-top-right")}
+${(p) => (p.$indexOverSix ? "origin-bottom-right" : "origin-top-right")}
 shadow-xl
 `;
 
