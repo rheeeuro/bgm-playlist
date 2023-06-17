@@ -203,6 +203,8 @@ w-full
 h-24
 px-4
 border-t-[1px]
+border-slate-900/10
+dark:border-slate-50/10
 flex
 justify-between
 items-center
@@ -244,6 +246,7 @@ break-words
 line-clamp-1
 mb-2
 text-slate-900
+dark:text-slate-50
 `;
 
 const Description = tw.p`
@@ -255,6 +258,7 @@ overflow-ellipsis
 break-words
 line-clamp-1
 text-slate-900/50
+dark:text-slate-50/50
 `;
 
 const MenuButton = tw.button`
@@ -267,7 +271,9 @@ const CustomEllipsisVerticalIcon = tw(EllipsisVerticalIcon)`
 w-6
 h-6
 text-slate-700
+dark:text-slate-200
 hover:text-pink-600
+dark:hover:text-purple-500
 `;
 
 export default PlaylistItem;

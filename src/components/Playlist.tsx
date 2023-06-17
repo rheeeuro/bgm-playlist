@@ -145,6 +145,7 @@ justify-between
 px-4
 space-x-4
 bg-pink-600/10
+dark:bg-slate-700
 `;
 
 const TitleContainer = tw.div`
@@ -152,6 +153,7 @@ w-full
 h-14
 flex
 items-center
+
 `;
 
 const BackButton = tw.button`
@@ -160,7 +162,7 @@ h-6
 rounded-md
 mr-4
 bg-pink-600/20
-
+dark:bg-purple-500/70
 `;
 
 const CustomArrowUturnLeftIcon = tw(ArrowUturnLeftIcon)`
@@ -169,7 +171,9 @@ h-6
 p-1
 cursor-pointer
 text-slate-700
+dark:text-slate-100
 hover:text-pink-600
+dark:hover:text-purple-400
 `;
 
 const CustomPlusIcon = tw(PlusIcon)`
@@ -177,13 +181,17 @@ cursor-pointer
 w-6
 h-6
 text-slate-700
+dark:text-slate-100
 hover:text-pink-600
+dark:hover:text-purple-400
 `;
 
 const Title = tw.h1`
 text-md
 font-thin
 tracking-widest
+text-slate-900
+dark:text-slate-50
 `;
 
 const List = tw.div`

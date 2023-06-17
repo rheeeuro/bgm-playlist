@@ -95,6 +95,7 @@ outline-none
 rounded-xl
 shadow-xl
 bg-slate-100
+dark:bg-slate-700
 `;
 
 const ModalForm = tw.form`
@@ -109,6 +110,9 @@ flex
 justify-center
 items-center
 bg-slate-300
+dark:bg-slate-600
+text-slate-900
+dark:text-slate-50
 rounded-tl-xl
 rounded-tr-xl
 text-md
@@ -143,6 +147,8 @@ const ModalInputTitle = tw.h1`
 text-md
 font-thin
 tracking-widest
+text-slate-900
+dark:text-slate-50
 `;
 
 const ModalInput = tw.input`
@@ -154,8 +160,10 @@ font-light
 px-2
 focus:outline-none
 focus:border-pink-500
+dark:focus:border-purple-400
 focus:ring-1
 focus:ring-pink-500
+dark:focus:ring-purple-400
 `;
 
 const ModalCancelButton = tw.button`
@@ -169,6 +177,9 @@ items-center
 justify-center
 rounded-full
 hover:bg-slate-600/20
+dark:hover:bg-slate-200/20
+text-slate-900
+dark:text-slate-50
 `;
 
 const CustomXMarkIcon = tw(XMarkIcon)`
@@ -180,6 +191,7 @@ const ModalButtonRow = tw.div`
 w-full
 h-12
 bg-slate-300
+dark:bg-slate-600
 rounded-br-xl
 rounded-bl-xl
 flex
@@ -201,7 +213,9 @@ text-center
 font-thin
 text-sm
 bg-green-300/20
-text-gray-800
+dark:bg-green-600/40
+text-slate-900
+dark:text-slate-50
 `;
 
 export default Modal;

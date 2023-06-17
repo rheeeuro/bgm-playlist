@@ -22,7 +22,8 @@ right-5
 const Text = tw.h1`
 font-thin
 text-sm
-text-slate-50/40
+text-slate-900/70
+dark:text-slate-50/40
 `;
 
 const Link = tw.a``;

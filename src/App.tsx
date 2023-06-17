@@ -18,7 +18,7 @@ export interface IYoutube {
 
 export interface ISetting {
   dark: boolean;
-  background: boolean;
+  repeat: boolean;
   volume: number;
 }
 
@@ -26,14 +26,22 @@ function App() {
   const [onPlayer, setOnPlayer] = useState<boolean>(false);
   const [youtubes, setYoutubes] = useState<IYoutube[]>([]);
   const [playItem, setPlayItem] = useState<IYoutube | undefined>();
-  const [repeat, setRepeat] = useState<boolean>(true);
+  const [setting, setSetting] = useState<ISetting>({
+    dark: false,
+    repeat: false,
+    volume: 100,
+  });
 
   useEffect(() => {
     const refreshYoutubes = refreshItems("youtubes", setYoutubes);
+    const refreshSetting = refreshItems("setting", setSetting);
     refreshYoutubes();
+    refreshSetting();
     window.addEventListener("storage", refreshYoutubes);
+    window.addEventListener("storage", refreshSetting);
     return () => {
       window.removeEventListener("storage", refreshYoutubes);
+      window.removeEventListener("storage", refreshSetting);
     };
   }, []);
 
@@ -51,10 +59,18 @@ function App() {
     }
   }, [playItem]);
 
+  useEffect(() => {
+    if (setting.dark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [setting.dark]);
+
   const goNext = () => {
     if (!playItem) return;
     const index = youtubes.indexOf(playItem);
-    if (repeat) {
+    if (setting.repeat) {
       setPlayItem(youtubes[(index + 1) % youtubes.length]);
     }
     if (index < youtubes.length - 1) {
@@ -65,7 +81,7 @@ function App() {
   const goPrevious = () => {
     if (!playItem) return;
     const index = youtubes.indexOf(playItem);
-    if (repeat) {
+    if (setting.repeat) {
       setPlayItem(youtubes[(index - 1 + youtubes.length) % youtubes.length]);
     } else {
       if (index > 0) {
@@ -75,12 +91,19 @@ function App() {
   };
 
   const toggleRepeat = () => {
-    setRepeat(!repeat);
+    setSetting((prev) => {
+      const newOne = {
+        ...prev,
+        repeat: !setting.repeat,
+      };
+      localStorage.setItem("setting", JSON.stringify(newOne));
+      return newOne;
+    });
   };
 
   return (
     <Container>
-      <Header />
+      <Header setting={setting} setSetting={setSetting} />
       <Content>
         <AnimatePresence mode="wait">
           {!onPlayer && (
@@ -116,7 +139,8 @@ function App() {
                 playItem={playItem}
                 goNext={goNext}
                 goPrevious={goPrevious}
-                repeat={repeat}
+                setting={setting}
+                setSetting={setSetting}
                 toggleRepeat={toggleRepeat}
               />
             </PlayerWrapper>

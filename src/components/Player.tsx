@@ -11,7 +11,7 @@ import {
   SpeakerXMarkIcon,
   ViewfinderCircleIcon,
 } from "@heroicons/react/24/outline";
-import { IYoutube } from "../App";
+import { ISetting, IYoutube } from "../App";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import { durationTextFormat, getMaxResThumbnailUrl } from "../utils/text";
@@ -23,7 +23,8 @@ interface PlayerProps {
   goPrevious: () => void;
   isFirst: boolean;
   isLast: boolean;
-  repeat: boolean;
+  setting: ISetting;
+  setSetting: React.Dispatch<React.SetStateAction<ISetting>>;
   toggleRepeat: () => void;
 }
 
@@ -34,7 +35,8 @@ export function Player({
   goPrevious,
   isFirst,
   isLast,
-  repeat,
+  setting,
+  setSetting,
   toggleRepeat,
 }: PlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -43,7 +45,6 @@ export function Player({
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
-  const [volume, setVolume] = useState<number>(100);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,7 +64,7 @@ export function Player({
     setYoutubePlayer(event.target);
     event.target.playVideo();
     setDuration(event.target.getDuration());
-    setVolume(event.target.getVolume());
+    event.target.setVolume(setting.volume);
   };
 
   const onPlayerStateChange: YouTubeProps["onStateChange"] = (event) => {
@@ -111,7 +112,14 @@ export function Player({
   const changeVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value);
     youtubePlayer.setVolume(value);
-    setVolume(value);
+    setSetting((prev) => {
+      const newOne = {
+        ...prev,
+        volume: value,
+      };
+      localStorage.setItem("setting", JSON.stringify(newOne));
+      return newOne;
+    });
     unMute();
   };
 
@@ -151,12 +159,12 @@ export function Player({
         onInput={seekTo}
         disabled={youtubePlayer === null}
       />
-      <Playtime>
-        <h1>{durationTextFormat(currentTime)}</h1>
-        <h1>{durationTextFormat(duration)}</h1>
-      </Playtime>
+      <PlayTimeWrapper>
+        <PlayTime>{durationTextFormat(currentTime)}</PlayTime>
+        <PlayTime>{durationTextFormat(duration)}</PlayTime>
+      </PlayTimeWrapper>
       <Controller>
-        <Button disabled={isFirst && !repeat}>
+        <Button disabled={isFirst && !setting.repeat}>
           <CustomBackwardIcon onClick={goPrevious} />
         </Button>
         {isPlaying ? (
@@ -168,7 +176,7 @@ export function Player({
             <CustomPlayIcon />
           </Button>
         )}
-        <Button disabled={isLast && !repeat}>
+        <Button disabled={isLast && !setting.repeat}>
           <CustomForwardIcon onClick={goNext} />
         </Button>
       </Controller>
@@ -207,13 +215,13 @@ export function Player({
                 max={100}
                 step={1}
                 onInput={changeVolume}
-                value={volume}
+                value={setting.volume}
               />
             </VolumeBarContainer>
           )}
         </ToolbarButton>
         <ToolbarButton title="repeat" onClick={toggleRepeat}>
-          <CustomArrowPathIcon $repeat={repeat} />
+          <CustomArrowPathIcon $repeat={setting.repeat} />
         </ToolbarButton>
         <ToolbarButton
           title="fullscreen"
@@ -248,6 +256,7 @@ items-center
 shadow-2xl
 rounded-lg
 bg-slate-50
+dark:bg-gray-700
 overflow-hidden
 `;
 
@@ -266,17 +275,23 @@ const ProgressBar = tw.input`
 w-full
 h-1
 accent-pink-600
+dark:accent-purple-500
 `;
 
-const Playtime = tw.div`
+const PlayTimeWrapper = tw.div`
 h-10
 w-full
 px-3
 py-1
 flex
 justify-between
+`;
+
+const PlayTime = tw.h1`
 font-thin
 text-sm
+text-slate-900
+dark:text-slate-50
 `;
 
 const Controller = tw.div`
@@ -289,8 +304,11 @@ items-center
 
 const Button = tw.button`
 disabled:text-slate-600/50
+dark:disabled:text-slate-300/30
 text-slate-700
+dark:text-slate-200
 hover:text-pink-600
+dark:hover:text-purple-500
 `;
 
 const CustomPlayIcon = tw(PlayIcon)`
@@ -333,6 +351,7 @@ break-words
 line-clamp-1
 mb-2
 text-slate-900
+dark:text-slate-50
 `;
 
 const Description = tw.p`
@@ -344,6 +363,7 @@ overflow-ellipsis
 break-words
 line-clamp-1
 text-slate-900/50
+dark:text-slate-50/50
 `;
 
 const Toolbar = tw.div`
@@ -360,8 +380,11 @@ h-6
 relative
 cursor-pointer
 disabled:text-slate-600/50
+dark:disabled:text-slate-300/30
 text-slate-700
+dark:text-slate-200
 hover:text-pink-600
+dark:hover:text-purple-500
 `;
 
 const CustomSpeakerWaveIcon = tw(SpeakerWaveIcon)`
@@ -387,6 +410,7 @@ const VolumeBar = tw.input`
 w-full
 h-full
 accent-pink-600
+dark:accent-purple-500
 `;
 
 const CustomArrowPathIcon = tw(ArrowPathIcon)<{ $repeat: boolean }>`
@@ -394,8 +418,8 @@ w-6
 h-6
 ${(p) =>
   p.$repeat
-    ? "text-pink-600 hover:text-slate-700"
-    : "text-slate-700 hover:text-pink-600"}
+    ? `text-pink-600 dark:text-purple-500 hover:text-slate-700  dark:hover:text-slate-200`
+    : `text-slate-700 dark:text-slate-200 hover:text-pink-600  dark:hover:text-purple-500`}
 `;
 
 const CustomViewfinderCircleIcon = tw(ViewfinderCircleIcon)`
