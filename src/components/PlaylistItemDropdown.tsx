@@ -13,6 +13,7 @@ interface PlaylistItemDropdownProps {
   deleteYoutube: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   isFirst: boolean;
   isLast: boolean;
+  indexOverSix: boolean;
 }
 
 export function PlaylistItemDropdown({
@@ -22,9 +23,10 @@ export function PlaylistItemDropdown({
   deleteYoutube,
   isFirst,
   isLast,
+  indexOverSix,
 }: PlaylistItemDropdownProps) {
   return (
-    <Container $isLast={isLast}>
+    <Container $bottomOrigin={indexOverSix && isLast}>
       <Button onClick={moveUp} disabled={isFirst}>
         <CustomArrowUpIcon />
         <Text>Move Up</Text>
@@ -45,7 +47,7 @@ export function PlaylistItemDropdown({
   );
 }
 
-const Container = tw.div<{ $isLast: boolean }>`
+const Container = tw.div<{ $bottomOrigin: boolean }>`
 absolute
 flex
 flex-col
@@ -54,14 +56,14 @@ items-center
 z-10
 w-32
 h-32
-${(p) => (p.$isLast ? "bottom-3" : "top-3")}
+${(p) => (p.$bottomOrigin ? "bottom-3" : "top-3")}
 right-3
 text-xs
 font-normal
 bg-pink-50
 dark:bg-slate-800
 rounded-md
-${(p) => (p.$isLast ? "origin-bottom-right" : "origin-top-right")}
+${(p) => (p.$bottomOrigin ? "origin-bottom-right" : "origin-top-right")}
 shadow-xl
 `;
 
