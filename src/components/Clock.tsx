@@ -27,7 +27,7 @@ export function Clock() {
     const hours = now.getHours();
 
     return [
-      `${formatText(month)}/${formatText(date)}`,
+      `${formatText(month)} / ${formatText(date)}`,
       `${formatText(hours)}:${formatText(minutes)}`,
     ];
   };
@@ -56,12 +56,13 @@ transition-colors
 
 const DateText = tw.h1`
 mx-5
-font-medium
+text-md
+font-thin
 `;
 
 const TimeText = tw.h1`
 text-xl
-font-extrabold
+font-medium
 `;
 
 export default Clock;

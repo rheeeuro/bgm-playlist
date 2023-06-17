@@ -105,7 +105,7 @@ function App() {
     <Container>
       <Header setting={setting} setSetting={setSetting} />
       <Content>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {!onPlayer && (
             <PlayerWrapper
               key={"list"}

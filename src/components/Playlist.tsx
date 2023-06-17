@@ -3,7 +3,7 @@ import { Container } from "./Player";
 import { ArrowUturnLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 import PlaylistItem from "./PlaylistItem";
 import { IYoutube } from "../App";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import { FieldErrors, useForm } from "react-hook-form";
 import { getVideoIdFromUrl } from "../utils/text";
@@ -35,6 +35,14 @@ export function Playlist({
     formState: { errors },
   } = useForm<NewYoutubeProps>();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [showTip, setShowTip] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedYoutubes = localStorage.getItem("youtubes");
+    if (!savedYoutubes) {
+      setShowTip(true);
+    }
+  }, []);
 
   const closeModal = () => {
     reset();
@@ -74,7 +82,11 @@ export function Playlist({
   };
 
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        setShowTip(false);
+      }}
+    >
       <Topbar>
         <TitleContainer>
           <BackButton
@@ -87,11 +99,25 @@ export function Playlist({
           </BackButton>
           <Title>Playlist</Title>
         </TitleContainer>
-        <CustomPlusIcon
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        />
+        <PlusButton>
+          <CustomPlusIcon
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          />
+          {showTip && (
+            <Tip>
+              <TipText>
+                <TipTitle>*TIP</TipTitle>
+                <br />
+                Copy the address
+                <br />
+                or shared URL of the video <br />
+                and add it to the list
+              </TipText>
+            </Tip>
+          )}
+        </PlusButton>
       </Topbar>
       <List>
         {youtubes.map((youtube) => (
@@ -140,12 +166,43 @@ w-full
 h-14
 rounded-t-xl
 flex
+relative
 items-center
 justify-between
 px-4
 space-x-4
 bg-pink-600/10
 dark:bg-slate-700
+`;
+
+const Tip = tw.div`
+w-64
+h-32
+absolute
+origin-top-right
+z-20
+top-10
+right-7
+rounded-tl-3xl
+rounded-b-3xl
+shadow-2xl
+flex
+justify-center
+items-center
+bg-pink-50
+dark:bg-slate-500
+`;
+
+const TipText = tw.h1`
+text-sm
+font-thin
+text-slate-900
+dark:text-slate-50
+`;
+
+const TipTitle = tw.span`
+text-lg
+font-medium
 `;
 
 const TitleContainer = tw.div`
@@ -176,8 +233,12 @@ hover:text-pink-600
 dark:hover:text-purple-400
 `;
 
+const PlusButton = tw.button`
+w-6
+h-6
+`;
+
 const CustomPlusIcon = tw(PlusIcon)`
-cursor-pointer
 w-6
 h-6
 text-slate-700
