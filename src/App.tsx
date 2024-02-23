@@ -53,9 +53,7 @@ function App() {
 
   useEffect(() => {
     if (playItem) {
-      document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl(
-        playItem.videoId
-      )}')`;
+      document.body.style.backgroundImage = `url('${getMaxResThumbnailUrl(playItem.videoId)}')`;
     }
   }, [playItem]);
 
@@ -154,6 +152,7 @@ function App() {
 
 const Container = tw.div`
 w-screen
+h-screen
 m-0
 flex
 flex-col
